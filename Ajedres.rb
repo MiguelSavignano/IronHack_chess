@@ -1,23 +1,4 @@
 require 'pry'
-a = {
- "A1" => Tower.new("A1"), 
- "B1" => Horse.new("B1"),
- "C1" => Bishop.new("C1"), 
- "D1" => Queen.new("D1"), 
- "E1" => King.new("E1"),
- "F1" => Bishop.new("F1"), 
- "G1" => Horse.new("G1"), 
- "H1" => Tower.new("H1"), 
-
- "A8" => Tower.new("A8"), 
- "B8" => Horse.new("B8"), 
- "C8" => Bishop.new("C8"), 
- "D8" => Queen.new("D8"), 
- "E8" => King.new("E8"),
- "F8" => Bishop.new("F8"), 
- "G8" => Horse.new("G8"), 
- "H8" => Tower.new("H8")
-}
 module MoveHelper
 		def move_tower(to_go)
 			change_to_i(to_go)
@@ -34,30 +15,23 @@ module MoveHelper
 end
 class Board
 	attr_accessor :hash_board
-	def initialize
-		@hash_board=a
-	end
-	def print_board(){
-	  puts "#{@hash_board["A8"]} #{@hash_board["B8"]} #{@hash_board["C8"]} #{@hash_board["D8"]} #{@hash_board["E8"]} #{@hash_board["F8"]} #{@hash_board["G8"]} #{@hash_board["H8"]}"
-	  puts "#{@hash_board["A7"]} #{@hash_board["B7"]} #{@hash_board["C7"]} #{@hash_board["D7"]} #{@hash_board["E7"]} #{@hash_board["F7"]} #{@hash_board["G7"]} #{@hash_board["H7"]}"
-	  puts "#{@hash_board["A8"]} #{@hash_board["B8"]} #{@hash_board["C8"]} #{@hash_board["D8"]} #{@hash_board["E8"]} #{@hash_board["F8"]} #{@hash_board["G8"]} #{@hash_board["H8"]}"
-	  puts "#{@hash_board["A3"]} #{@hash_board["B3"]} #{@hash_board["C3"]} #{@hash_board["D3"]} #{@hash_board["E3"]} #{@hash_board["F3"]} #{@hash_board["G3"]} #{@hash_board["H3"]}"
-	  puts "#{@hash_board["A2"]} #{@hash_board["B2"]} #{@hash_board["C2"]} #{@hash_board["D2"]} #{@hash_board["E2"]} #{@hash_board["F2"]} #{@hash_board["G2"]} #{@hash_board["H2"]}"
-	  puts "#{@hash_board["A1"]} #{@hash_board["B1"]} #{@hash_board["C1"]} #{@hash_board["D1"]} #{@hash_board["E1"]} #{@hash_board["F1"]} #{@hash_board["G1"]} #{@hash_board["H1"]}"
-	  
-
-		
-	end
-	def tranform_hash
+	def initialize(hash_board)
+		@hash_board=hash_board
 		b={}
-		a.each do |key,value|
-			if a[key]==nil
+		@hash_board.each do |key,value|
+			if @hash_board[key]==nil
 				b[key]="-"
 			else
 				b[key]=value.draw_pice
 			end
 		end
-		}
+	  @hash_board=b
+	  puts "#{@hash_board["A8"]} #{@hash_board["B8"]} #{@hash_board["C8"]} #{@hash_board["D8"]} #{@hash_board["E8"]} #{@hash_board["F8"]} #{@hash_board["G8"]} #{@hash_board["H8"]}"
+	  puts "#{@hash_board["A7"]} #{@hash_board["B7"]} #{@hash_board["C7"]} #{@hash_board["D7"]} #{@hash_board["E7"]} #{@hash_board["F7"]} #{@hash_board["G7"]} #{@hash_board["H7"]}"
+	  puts "#{@hash_board["A4"]} #{@hash_board["B4"]} #{@hash_board["C4"]} #{@hash_board["D4"]} #{@hash_board["E4"]} #{@hash_board["F4"]} #{@hash_board["G4"]} #{@hash_board["H4"]}"
+	  puts "#{@hash_board["A3"]} #{@hash_board["B3"]} #{@hash_board["C3"]} #{@hash_board["D3"]} #{@hash_board["E3"]} #{@hash_board["F3"]} #{@hash_board["G3"]} #{@hash_board["H3"]}"
+	  puts "#{@hash_board["A2"]} #{@hash_board["B2"]} #{@hash_board["C2"]} #{@hash_board["D2"]} #{@hash_board["E2"]} #{@hash_board["F2"]} #{@hash_board["G2"]} #{@hash_board["H2"]}"
+	  puts "#{@hash_board["A1"]} #{@hash_board["B1"]} #{@hash_board["C1"]} #{@hash_board["D1"]} #{@hash_board["E1"]} #{@hash_board["F1"]} #{@hash_board["G1"]} #{@hash_board["H1"]}"
 	end
 end
 class Piece
@@ -138,14 +112,72 @@ puts arfil.can_move_to("D8")
 puts reina.can_move_to("D8") 
 puts horse.can_move_to("D8") 
 #"f".downcase.ord-96 
+ a = {
+ "A1" => Tower.new("A1"), 
+ "B1" => Horse.new("B1"),
+ "C1" => Bishop.new("C1"), 
+ "D1" => Queen.new("D1"), 
+ "E1" => King.new("E1"),
+ "F1" => Bishop.new("F1"), 
+ "G1" => Horse.new("G1"), 
+ "H1" => Tower.new("H1"), 
  
-b={}
-a.each do |key,value|
-	if a[key]==nil
-		b[key]="-"
-	else
-		b[key]=value.draw_pice
-	end
-end
+ "A2" => nil, 
+ "B2" => nil,
+ "C2" => nil, 
+ "D2" => nil, 
+ "E2" => nil,
+ "F2" => nil, 
+ "G2" => nil, 
+ "H2" => nil,
+  
+ "A3" => nil, 
+ "B3" => nil,
+ "C3" => nil, 
+ "D3" => nil, 
+ "E3" => nil,
+ "F3" => nil, 
+ "G3" => nil, 
+ "H3" => nil,
+
+ "A4" => nil, 
+ "B4" => nil,
+ "C4" => nil, 
+ "D4" => nil, 
+ "E4" => nil,
+ "F4" => nil, 
+ "G4" => nil, 
+ "H4" => nil,
+
+ "A5" => nil, 
+ "B5" => nil,
+ "C5" => nil, 
+ "D5" => nil, 
+ "E5" => nil,
+ "F5" => nil, 
+ "G5" => nil, 
+ "H5" => nil,
+
+ "A6" => nil, 
+ "B6" => nil,
+ "C6" => nil, 
+ "D6" => nil, 
+ "E6" => nil,
+ "F6" => nil, 
+ "G6" => nil, 
+ "H6" => nil,
+
+
+
+ "A8" => Tower.new("A8"), 
+ "B8" => Horse.new("B8"), 
+ "C8" => Bishop.new("C8"), 
+ "D8" => Queen.new("D8"), 
+ "E8" => King.new("E8"),
+ "F8" => Bishop.new("F8"), 
+ "G8" => Horse.new("G8"), 
+ "H8" => Tower.new("H8")
+}
+board=Board.new(a)
 binding.pry
 puts ""
