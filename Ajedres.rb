@@ -4,7 +4,7 @@ module MoveHelper
 			  change_to_i(pice_origin,pice_to_go)
 			  @origin_vertical_move==@to_go_vertical_move || @origin_hotizontal_move==@to_go_hotizontal_move
 		end
-		def move_bishop(pice_origin,to_go)
+		def move_bishop(pice_origin,pice_to_go)
 			change_to_i(pice_origin,pice_to_go)
 			  (@to_go_vertical_move-@origin_vertical_move).abs==(@to_go_hotizontal_move-@origin_hotizontal_move).abs
 		end
@@ -14,30 +14,35 @@ module MoveHelper
 		end
 end
 class Board
-	attr_accessor :hash_board
+	attr_accessor :hash_board, :pice_to_go, :pice_to_go, :pice_in_board
 	def initialize(hash_board)
 		@hash_board=hash_board
-		b={}
+		@b={}
 		@hash_board.each do |key,value|
 			if @hash_board[key]==nil
-				b[key]="-"
+				@b[key]="-"
 			else
-				b[key]=value.draw_pice
+				@b[key]=value.draw_pice
 			end
 		end
-	  puts "#{b["A8"]} #{b["B8"]} #{b["C8"]} #{b["D8"]} #{b["E8"]} #{b["F8"]} #{b["G8"]} #{b["H8"]}"
-	  puts "#{b["A7"]} #{b["B7"]} #{b["C7"]} #{b["D7"]} #{b["E7"]} #{b["F7"]} #{b["G7"]} #{b["H7"]}"
-	  puts "#{b["A4"]} #{b["B4"]} #{b["C4"]} #{b["D4"]} #{b["E4"]} #{b["F4"]} #{b["G4"]} #{b["H4"]}"
-	  puts "#{b["A3"]} #{b["B3"]} #{b["C3"]} #{b["D3"]} #{b["E3"]} #{b["F3"]} #{b["G3"]} #{b["H3"]}"
-	  puts "#{b["A2"]} #{b["B2"]} #{b["C2"]} #{b["D2"]} #{b["E2"]} #{b["F2"]} #{b["G2"]} #{b["H2"]}"
-	  puts "#{b["A1"]} #{b["B1"]} #{b["C1"]} #{b["D1"]} #{b["E1"]} #{b["F1"]} #{b["G1"]} #{b["H1"]}"
+		def print_board
+			puts "#{@b["A8"]} #{@b["B8"]} #{@b["C8"]} #{@b["D8"]} #{@b["E8"]} #{@b["F8"]} #{@b["G8"]} #{@b["H8"]}"
+			puts "#{@b["A7"]} #{@b["B7"]} #{@b["C7"]} #{@b["D7"]} #{@b["E7"]} #{@b["F7"]} #{@b["G7"]} #{@b["H7"]}"
+			puts "#{@b["A6"]} #{@b["B6"]} #{@b["C6"]} #{@b["D6"]} #{@b["E6"]} #{@b["F6"]} #{@b["G6"]} #{@b["H6"]}"
+			puts "#{@b["A5"]} #{@b["B5"]} #{@b["C5"]} #{@b["D5"]} #{@b["E5"]} #{@b["F5"]} #{@b["G5"]} #{@b["H5"]}"
+			puts "#{@b["A4"]} #{@b["B4"]} #{@b["C4"]} #{@b["D4"]} #{@b["E4"]} #{@b["F4"]} #{@b["G4"]} #{@b["H4"]}"
+			puts "#{@b["A3"]} #{@b["B3"]} #{@b["C3"]} #{@b["D3"]} #{@b["E3"]} #{@b["F3"]} #{@b["G3"]} #{@b["H3"]}"
+			puts "#{@b["A2"]} #{@b["B2"]} #{@b["C2"]} #{@b["D2"]} #{@b["E2"]} #{@b["F2"]} #{@b["G2"]} #{@b["H2"]}"
+			puts "#{@b["A1"]} #{@b["B1"]} #{@b["C1"]} #{@b["D1"]} #{@b["E1"]} #{@b["F1"]} #{@b["G1"]} #{@b["H1"]}"
+		end
+	  
 	end
-
-	def move_pice
-		pice_origin="A1"
-		pice_to_go="A3"
+	def move_pice(pice_origin,pice_to_go)
 		pice_in_board=@hash_board[pice_origin]
 		pice_in_board.can_move_to(pice_origin,pice_to_go)
+	end
+	def piece(pice_search)
+		pice_in_board=@hash_board[pice_search]
 	end
 end
 class Piece
@@ -64,8 +69,8 @@ class Horse <Piece
 		super
 		@draw_pice="N"
 	end
-	def can_move_to(to_go)
-		( self.move_horse_circle(to_go) ) && !self.move_tower(to_go)  && !self.move_bishop(to_go)
+	def can_move_to(pice_origin,pice_to_go)
+		( self.move_horse_circle(pice_origin,pice_to_go) ) && !self.move_tower(pice_origin,pice_to_go)  && !self.move_bishop(pice_origin,pice_to_go)
 	end
 end
 class Bishop <Piece
@@ -73,8 +78,8 @@ class Bishop <Piece
 		super
 		@draw_pice="B"
 	end
-	def can_move_to(to_go)
-		 self.move_bishop(to_go)
+	def can_move_to(pice_origin,pice_to_go)
+		 self.move_bishop(pice_origin,pice_to_go)
 	end
 end
 class Queen <Piece
@@ -82,8 +87,8 @@ class Queen <Piece
 		super
 		@draw_pice="Q"
 	end
-	def can_move_to(to_go)
-		self.move_tower(to_go) || self.move_bishop(to_go)
+	def can_move_to(pice_origin,pice_to_go)
+		self.move_tower(pice_origin,pice_to_go) || self.move_bishop(pice_origin,pice_to_go)
 	end
 end
 class King <Piece
@@ -91,8 +96,8 @@ class King <Piece
 		super
 		@draw_pice="K"
 	end
-	def can_move_to(to_go)
-		self.move_tower(to_go)
+	def can_move_to(pice_origin,pice_to_go)
+		self.move_tower(pice_origin,pice_to_go)
 	end
 end
 class Pown <Piece
@@ -100,8 +105,8 @@ class Pown <Piece
 		super
 		@draw_pice="P"
 	end
-	def can_move_to(to_go)
-		self.move_tower(to_go)
+	def can_move_to(pice_origin,pice_to_go)
+		self.move_tower(pice_origin,pice_to_go)
 	end
 end
 #"f".downcase.ord-96 
@@ -160,7 +165,14 @@ end
  "G6" => nil, 
  "H6" => nil,
 
-
+ "A7" => nil, 
+ "B7" => nil,
+ "C7" => nil, 
+ "D7" => nil, 
+ "E7" => nil,
+ "F7" => nil, 
+ "G7" => nil, 
+ "H7" => nil,
 
  "A8" => Tower.new, 
  "B8" => Horse.new, 
@@ -173,4 +185,5 @@ end
 }
 board=Board.new(a)
 binding.pry
-puts ""
+#board.hash_board["B1"]  search pice in board
+#board.move_pice("A1","H7") board move
