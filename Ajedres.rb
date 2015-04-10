@@ -1,119 +1,118 @@
 require 'pry'
 module MoveHelper
-		def move_tower(pice_origin,pice_to_go)
-			  change_to_i(pice_origin,pice_to_go)
+		def move_tower(piece_origin,piece_to_go)
+			  change_to_i(piece_origin,piece_to_go)
 			  @origin_vertical_move==@to_go_vertical_move || @origin_hotizontal_move==@to_go_hotizontal_move
 		end
-		def move_bishop(pice_origin,pice_to_go)
-			change_to_i(pice_origin,pice_to_go)
+		def move_bishop(piece_origin,piece_to_go)
+			change_to_i(piece_origin,piece_to_go)
 			  (@to_go_vertical_move-@origin_vertical_move).abs==(@to_go_hotizontal_move-@origin_hotizontal_move).abs
 		end
-		def move_horse_circle(pice_origin,pice_to_go)
-			change_to_i(pice_origin,pice_to_go)
+		def move_horse_circle(piece_origin,piece_to_go)
+			change_to_i(piece_origin,piece_to_go)
 			 (@to_go_vertical_move-@origin_vertical_move).abs<=2 && (@to_go_hotizontal_move-@origin_hotizontal_move).abs<=2
 		end
 end
 class Board
-	attr_accessor :hash_board, :pice_to_go, :pice_to_go, :pice_in_board
+	attr_accessor :hash_board, :piece_to_go, :piece_to_go, :piece_in_board
 	def initialize(hash_board)
 		@hash_board=hash_board
-		@b={}
+		@board_to_print={}
 		@hash_board.each do |key,value|
 			if @hash_board[key]==nil
-				@b[key]="-"
+				@board_to_print[key]="-"
 			else
-				@b[key]=value.draw_pice
+				@board_to_print[key]=value.draw_piece
 			end
 		end
-		def print_board
-			puts "#{@b["A8"]} #{@b["B8"]} #{@b["C8"]} #{@b["D8"]} #{@b["E8"]} #{@b["F8"]} #{@b["G8"]} #{@b["H8"]}"
-			puts "#{@b["A7"]} #{@b["B7"]} #{@b["C7"]} #{@b["D7"]} #{@b["E7"]} #{@b["F7"]} #{@b["G7"]} #{@b["H7"]}"
-			puts "#{@b["A6"]} #{@b["B6"]} #{@b["C6"]} #{@b["D6"]} #{@b["E6"]} #{@b["F6"]} #{@b["G6"]} #{@b["H6"]}"
-			puts "#{@b["A5"]} #{@b["B5"]} #{@b["C5"]} #{@b["D5"]} #{@b["E5"]} #{@b["F5"]} #{@b["G5"]} #{@b["H5"]}"
-			puts "#{@b["A4"]} #{@b["B4"]} #{@b["C4"]} #{@b["D4"]} #{@b["E4"]} #{@b["F4"]} #{@b["G4"]} #{@b["H4"]}"
-			puts "#{@b["A3"]} #{@b["B3"]} #{@b["C3"]} #{@b["D3"]} #{@b["E3"]} #{@b["F3"]} #{@b["G3"]} #{@b["H3"]}"
-			puts "#{@b["A2"]} #{@b["B2"]} #{@b["C2"]} #{@b["D2"]} #{@b["E2"]} #{@b["F2"]} #{@b["G2"]} #{@b["H2"]}"
-			puts "#{@b["A1"]} #{@b["B1"]} #{@b["C1"]} #{@b["D1"]} #{@b["E1"]} #{@b["F1"]} #{@b["G1"]} #{@b["H1"]}"
+		def print
+			puts "#{@board_to_print["A8"]} #{@board_to_print["B8"]} #{@board_to_print["C8"]} #{@board_to_print["D8"]} #{@board_to_print["E8"]} #{@board_to_print["F8"]} #{@board_to_print["G8"]} #{@board_to_print["H8"]}"
+			puts "#{@board_to_print["A7"]} #{@board_to_print["B7"]} #{@board_to_print["C7"]} #{@board_to_print["D7"]} #{@board_to_print["E7"]} #{@board_to_print["F7"]} #{@board_to_print["G7"]} #{@board_to_print["H7"]}"
+			puts "#{@board_to_print["A6"]} #{@board_to_print["B6"]} #{@board_to_print["C6"]} #{@board_to_print["D6"]} #{@board_to_print["E6"]} #{@board_to_print["F6"]} #{@board_to_print["G6"]} #{@board_to_print["H6"]}"
+			puts "#{@board_to_print["A5"]} #{@board_to_print["B5"]} #{@board_to_print["C5"]} #{@board_to_print["D5"]} #{@board_to_print["E5"]} #{@board_to_print["F5"]} #{@board_to_print["G5"]} #{@board_to_print["H5"]}"
+			puts "#{@board_to_print["A4"]} #{@board_to_print["B4"]} #{@board_to_print["C4"]} #{@board_to_print["D4"]} #{@board_to_print["E4"]} #{@board_to_print["F4"]} #{@board_to_print["G4"]} #{@board_to_print["H4"]}"
+			puts "#{@board_to_print["A3"]} #{@board_to_print["B3"]} #{@board_to_print["C3"]} #{@board_to_print["D3"]} #{@board_to_print["E3"]} #{@board_to_print["F3"]} #{@board_to_print["G3"]} #{@board_to_print["H3"]}"
+			puts "#{@board_to_print["A2"]} #{@board_to_print["B2"]} #{@board_to_print["C2"]} #{@board_to_print["D2"]} #{@board_to_print["E2"]} #{@board_to_print["F2"]} #{@board_to_print["G2"]} #{@board_to_print["H2"]}"
+			puts "#{@board_to_print["A1"]} #{@board_to_print["B1"]} #{@board_to_print["C1"]} #{@board_to_print["D1"]} #{@board_to_print["E1"]} #{@board_to_print["F1"]} #{@board_to_print["G1"]} #{@board_to_print["H1"]}"
 		end
-	  
 	end
-	def move_pice(pice_origin,pice_to_go)
-		pice_in_board=@hash_board[pice_origin]
-		pice_in_board.can_move_to(pice_origin,pice_to_go)
+	def move_piece(piece_origin,piece_to_go)
+		piece_in_board=@hash_board[piece_origin]
+		piece_in_board.can_move_to(piece_origin,piece_to_go)
 	end
-	def piece(pice_search)
-		pice_in_board=@hash_board[pice_search]
+	def piece(piece_search)
+		piece_in_board=@hash_board[piece_search]
 	end
 end
 class Piece
 	attr_accessor :origin, :to_go, :origin_vertical_move ,:origin_hotizontal_move,:to_go_vertical_move, :to_go_hotizontal_move
-	attr_accessor :draw_pice
+	attr_accessor :draw_piece
 	include MoveHelper
-	def change_to_i(pice_origin,pice_to_go)
-		@origin_vertical_move=pice_origin[0].downcase.ord-96
-		@origin_hotizontal_move=pice_origin[1].to_i 
-		@to_go_vertical_move=pice_to_go[0].downcase.ord-96
-		@to_go_hotizontal_move=pice_to_go[1].to_i 
+	def change_to_i(piece_origin,piece_to_go)
+		@origin_vertical_move=piece_origin[0].downcase.ord-96
+		@origin_hotizontal_move=piece_origin[1].to_i 
+		@to_go_vertical_move=piece_to_go[0].downcase.ord-96
+		@to_go_hotizontal_move=piece_to_go[1].to_i 
 	end
 end
 class Tower <Piece
 	def initialize
-		@draw_pice="R"
+		@draw_piece="R"
 	end
-	def can_move_to(pice_origin,pice_to_go)
-		 self.move_tower(pice_origin,pice_to_go)
+	def can_move_to(piece_origin,piece_to_go)
+		 self.move_tower(piece_origin,piece_to_go)
 	end
 end
 class Horse <Piece
 	def initialize
 		super
-		@draw_pice="N"
+		@draw_piece="N"
 	end
-	def can_move_to(pice_origin,pice_to_go)
-		( self.move_horse_circle(pice_origin,pice_to_go) ) && !self.move_tower(pice_origin,pice_to_go)  && !self.move_bishop(pice_origin,pice_to_go)
+	def can_move_to(piece_origin,piece_to_go)
+		( self.move_horse_circle(piece_origin,piece_to_go) ) && !self.move_tower(piece_origin,piece_to_go)  && !self.move_bishop(piece_origin,piece_to_go)
 	end
 end
 class Bishop <Piece
 	def initialize
 		super
-		@draw_pice="B"
+		@draw_piece="B"
 	end
-	def can_move_to(pice_origin,pice_to_go)
-		 self.move_bishop(pice_origin,pice_to_go)
+	def can_move_to(piece_origin,piece_to_go)
+		 self.move_bishop(piece_origin,piece_to_go)
 	end
 end
 class Queen <Piece
 	def initialize
 		super
-		@draw_pice="Q"
+		@draw_piece="Q"
 	end
-	def can_move_to(pice_origin,pice_to_go)
-		self.move_tower(pice_origin,pice_to_go) || self.move_bishop(pice_origin,pice_to_go)
+	def can_move_to(piece_origin,piece_to_go)
+		self.move_tower(piece_origin,piece_to_go) || self.move_bishop(piece_origin,piece_to_go)
 	end
 end
 class King <Piece
 	def initialize
 		super
-		@draw_pice="K"
+		@draw_piece="K"
 	end
-	def can_move_to(pice_origin,pice_to_go)
-		self.move_tower(pice_origin,pice_to_go)
+	def can_move_to(piece_origin,piece_to_go)
+		self.move_tower(piece_origin,piece_to_go)
 	end
 end
 class Pown <Piece
 	def initialize
 		super
-		@draw_pice="P"
+		@draw_piece="P"
 	end
-	def can_move_to(pice_origin,pice_to_go)
-		self.move_tower(pice_origin,pice_to_go)
+	def can_move_to(piece_origin,piece_to_go)
+		self.move_tower(piece_origin,piece_to_go)
 	end
 end
 #"f".downcase.ord-96 
- a = {
+ INITIALIZE_BOARD = {
  "A1" => Tower.new, 
  "B1" => Horse.new,
- "C1" => Bishop.new, 
+ "C1" => Bishop.new 
  "D1" => Queen.new, 
  "E1" => King.new,
  "F1" => Bishop.new, 
@@ -185,5 +184,5 @@ end
 }
 board=Board.new(a)
 binding.pry
-#board.hash_board["B1"]  search pice in board
-#board.move_pice("A1","H7") board move
+#board.hash_board["B1"]  search piece in board
+#board.move_piece("A1","H7") board move
