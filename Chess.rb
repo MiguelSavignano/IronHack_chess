@@ -38,7 +38,7 @@ class Board
 	end
 	def move_piece(piece_origin,piece_to_go)
 		piece_in_board=@hash_board[piece_origin]
-		piece_in_board.can_move_to(piece_origin,piece_to_go)
+		piece_in_board.can_move_to(piece_origin,piece_to_go) if piece_in_board != nil
 	end
 	def piece(piece_search)
 		piece_in_board=@hash_board[piece_search]
@@ -108,11 +108,10 @@ class Pown <Piece
 		self.move_tower(piece_origin,piece_to_go)
 	end
 end
-#"f".downcase.ord-96 
  INITIALIZE_BOARD = {
  "A1" => Tower.new, 
  "B1" => Horse.new,
- "C1" => Bishop.new 
+ "C1" => Bishop.new, 
  "D1" => Queen.new, 
  "E1" => King.new,
  "F1" => Bishop.new, 
@@ -182,7 +181,8 @@ end
  "G8" => Horse.new, 
  "H8" => Tower.new
 }
-board=Board.new(a)
+board=Board.new(INITIALIZE_BOARD)
 binding.pry
-#board.hash_board["B1"]  search piece in board
+#board.print print board instance
+#board.piece("B1") search piece in board
 #board.move_piece("A1","H7") board move
