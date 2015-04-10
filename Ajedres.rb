@@ -17,26 +17,27 @@ class ValidatorFicha
 		@origin_vertical_move=origin[0].downcase.ord-96
 		@origin_hotizontal_move=origin[1].to_i 
 	end
+	def change_to_i(to_go)
+		@to_go_vertical_move=to_go[0].downcase.ord-96
+		@to_go_hotizontal_move=to_go[1].to_i 
+	end
 end
 class ValidatorTorre <ValidatorFicha
 	def can_move_to(to_go)
-		@to_go_vertical_move=to_go[0].downcase.ord-96
-		@to_go_hotizontal_move=to_go[1].to_i 
+		change_to_i(to_go)
 		return true if @origin_vertical_move==@to_go_vertical_move || @origin_hotizontal_move==@to_go_hotizontal_move
 		return false
 	end
 end
 class ValidatorArfil <ValidatorFicha
 	def can_move_to(to_go)
-		@to_go_vertical_move=to_go[0].downcase.ord-96
-		@to_go_hotizontal_move=to_go[1].to_i
+		change_to_i(to_go)
 		return  @to_go_vertical_move-@origin_vertical_move==@to_go_hotizontal_move-@origin_hotizontal_move
 	end
 end
 class ValidatorReina <ValidatorFicha
 	def can_move_to(to_go)
-		@to_go_vertical_move=to_go[0].downcase.ord-96
-		@to_go_hotizontal_move=to_go[1].to_i 
+		change_to_i(to_go)
 		return true if @origin_vertical_move==@to_go_vertical_move || @origin_hotizontal_move==@to_go_hotizontal_move
 		return true if @to_go_vertical_move-@origin_vertical_move==@to_go_hotizontal_move-@origin_hotizontal_move
 		return false
