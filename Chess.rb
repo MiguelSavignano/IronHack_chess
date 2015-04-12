@@ -23,10 +23,16 @@ module MoveHelper
 		end
 end
 class Board
-	attr_accessor :board, :piece_to_go, :piece_to_go, :piece_in_board
-	def initialize(hash_board)
+	attr_accessor :board, :piece_to_go, :piece_to_go, :piece_in_board,:player_who_game,:player_who_wait
+	def initialize(hash_board,white_player,black_player)
 		@empty_position="-"
+		@player_who_game=white_player
+		@player_who_wait=black_player
 		@board=hash_board
+	end
+	def change_player(player_who_game)
+		@player_who_game=@player_who_wait
+		@player_who_wait=player_who_game
 	end
 	def print
 			puts "-"*19
@@ -47,12 +53,15 @@ class Board
 	def move_piece(position_origin,position_to_go)
 		piece_in_board=@board[position_origin]
 		other_piece=@board[position_to_go]
-		if  piece_in_board != nil && piece_in_board.can_move_to(position_origin,position_to_go)    
-			if piece_can_kill(position_origin,position_to_go)
-		   		@board[position_to_go]=piece_in_board  
-		   		@board[position_origin]=nil
-		   end 
+		if  piece_in_board != nil && piece_in_board.color==@player_who_game.color && piece_in_board.can_move_to(position_origin,position_to_go)
+				if piece_can_kill(position_origin,position_to_go)
+		   			@board[position_to_go]=piece_in_board  
+		   			@board[position_origin]=nil
+		   			return true
+		   		end 
+		    return false
 		end
+	system "cls"
 	print
 	end
 	def piece_can_kill(position_origin,position_to_go)
@@ -198,14 +207,58 @@ end
  "B8" => HorseBlack.new, 
  "C8" => BishopBlack.new, 
  "D8" => QueenBlack.new, 
- "E8" => KingBlack.	new,
+ "E8" => KingBlack.new,
  "F8" => BishopBlack.new, 
  "G8" => HorseBlack.new, 
  "H8" => TowerBlack.new
 }
-board=Board.new(INITIALIZE_BOARD)
-board.print
-
+class Player1
+	attr_accessor :color
+	def initialize
+		@color="W"
+	end
+	def ask_what_want_move
+		system "cls"
+		puts "Player1: what piece you want to move?"
+		gets.chomp
+	end
+	def ask_where_want_move
+		puts "Where piece you want to move?"
+		gets.chomp
+	end
+end
+class Player2
+	attr_accessor :color
+	def initialize
+		@color="B"
+	end
+	def ask_what_want_move
+		system "cls"
+		puts "Player2: what piece you want to move?"
+		gets.chomp
+	end
+	def ask_where_want_move
+		puts "Where piece you want to move?"
+		gets.chomp
+	end
+end
+class Ouput
+	def print_text(text)
+		puts text
+	end
+end
+board=Board.new(INITIALIZE_BOARD,Player1.new,Player2.new)
+output=Ouput.new
+while 1==1
+	board.print
+	if board.move_piece(board.player_who_game.ask_what_want_move,board.player_who_game.ask_where_want_move)
+		output.print_text "Legal move"
+		board.change_player(board.player_who_game)
+	else 
+		output.print_text "Ilegal move"
+	end
+	system "cls"
+end
 binding.pry
 #board.print print board instance
 #board.piece("B1") search piece in board
