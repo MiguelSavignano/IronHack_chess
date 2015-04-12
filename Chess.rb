@@ -1,7 +1,7 @@
 require 'pry'
 class NilClass
 	def draw_piece
-		"-"
+		"--"
 	end
 end
 module MoveHelper
@@ -39,23 +39,35 @@ class Board
 			puts "#{2} |#{@board["A2"].draw_piece} #{@board["B2"].draw_piece} #{@board["C2"].draw_piece} #{@board["D2"].draw_piece} #{@board["E2"].draw_piece} #{@board["F2"].draw_piece} #{@board["G2"].draw_piece} #{@board["H2"].draw_piece}|"
 			puts "#{1} |#{@board["A1"].draw_piece} #{@board["B1"].draw_piece} #{@board["C1"].draw_piece} #{@board["D1"].draw_piece} #{@board["E1"].draw_piece} #{@board["F1"].draw_piece} #{@board["G1"].draw_piece} #{@board["H1"].draw_piece}|"
 			puts "-"*19
-			puts "   A B C D E F G H "
+			puts "   A  B  C  D  E  F  G  H"
 	end
 	def piece(piece_search)
 		piece_in_board=@board[piece_search].draw_piece
 	end
 	def move_piece(position_origin,position_to_go)
 		piece_in_board=@board[position_origin]
-		if piece_in_board != nil && piece_in_board.can_move_to(position_origin,position_to_go)
-		   @board[position_to_go]=piece_in_board  
-		   @board[position_origin]=nil 
+		other_piece=@board[position_to_go]
+		if  piece_in_board != nil && piece_in_board.can_move_to(position_origin,position_to_go)    
+			if piece_can_kill(position_origin,position_to_go)
+		   		@board[position_to_go]=piece_in_board  
+		   		@board[position_origin]=nil
+		   end 
 		end
-		print
+	print
+	end
+	def piece_can_kill(position_origin,position_to_go)
+		other_piece=@board[position_to_go]
+		the_piece=@board[position_origin]
+		if other_piece==nil 
+			true
+		else
+		    other_piece.color!=the_piece.color
+		end
 	end
 end
 class Piece
 	attr_accessor :origin, :to_go, :origin_vertical_move ,:origin_hotizontal_move,:to_go_vertical_move, :to_go_hotizontal_move
-	attr_accessor :draw_piece
+	attr_accessor :draw_piece,:color
 	include MoveHelper
 	def change_to_i(piece_origin,piece_to_go)
 		@origin_vertical_move=piece_origin[0].downcase.ord-96
@@ -64,77 +76,132 @@ class Piece
 		@to_go_hotizontal_move=piece_to_go[1].to_i 
 	end
 end
-class Tower <Piece
+class TowerWhite <Piece
 	def initialize
-		@draw_piece="R"
+		@draw_piece="wR"
+		@color="W"
 	end
 	def can_move_to(piece_origin,piece_to_go)
 		 self.move_tower(piece_origin,piece_to_go)
 	end
 end
-class Horse <Piece
+class TowerBlack <Piece
 	def initialize
-		super
-		@draw_piece="N"
+		@draw_piece="bR"
+		@color="B"
+	end
+	def can_move_to(piece_origin,piece_to_go)
+		 self.move_tower(piece_origin,piece_to_go)
+	end
+end
+class HorseWhite <Piece
+	def initialize
+		@draw_piece="wN"
+		@color="W"
 	end
 	def can_move_to(piece_origin,piece_to_go)
 		( self.move_horse_circle(piece_origin,piece_to_go) ) && !self.move_tower(piece_origin,piece_to_go)  && !self.move_bishop(piece_origin,piece_to_go)
 	end
 end
-class Bishop <Piece
+class HorseBlack <Piece
 	def initialize
-		super
-		@draw_piece="B"
+		@draw_piece="bN"
+		@color="B"
+	end
+	def can_move_to(piece_origin,piece_to_go)
+		( self.move_horse_circle(piece_origin,piece_to_go) ) && !self.move_tower(piece_origin,piece_to_go)  && !self.move_bishop(piece_origin,piece_to_go)
+	end
+end
+class BishopWhite <Piece
+	def initialize
+		@draw_piece="wB"
+		@color="W"
 	end
 	def can_move_to(piece_origin,piece_to_go)
 		 self.move_bishop(piece_origin,piece_to_go)
 	end
 end
-class Queen <Piece
+class BishopBlack <Piece
 	def initialize
-		super
-		@draw_piece="Q"
+		@draw_piece="bB"
+		@color="B"
+	end
+	def can_move_to(piece_origin,piece_to_go)
+		 self.move_bishop(piece_origin,piece_to_go)
+	end
+end
+class QueenWhite <Piece
+	def initialize
+		@draw_piece="wQ"
+		@color="W"
 	end
 	def can_move_to(piece_origin,piece_to_go)
 		self.move_tower(piece_origin,piece_to_go) || self.move_bishop(piece_origin,piece_to_go)
 	end
 end
-class King <Piece
+class QueenBlack <Piece
 	def initialize
-		super
-		@draw_piece="K"
+		@draw_piece="bQ"
+		@color="B"
+	end
+	def can_move_to(piece_origin,piece_to_go)
+		self.move_tower(piece_origin,piece_to_go) || self.move_bishop(piece_origin,piece_to_go)
+	end
+end
+class KingWhite <Piece
+	def initialize
+		@draw_piece="wK"
+		@color="W"
 	end
 	def can_move_to(piece_origin,piece_to_go)
 		self.move_king(piece_origin,piece_to_go)
 	end
 end
-class Pown <Piece
+class KingBlack <Piece
 	def initialize
-		super
-		@draw_piece="P"
+		@draw_piece="bK"
+		@color="B"
+	end
+	def can_move_to(piece_origin,piece_to_go)
+		self.move_king(piece_origin,piece_to_go)
+	end
+end
+class PownWhite <Piece
+	def initialize
+		@draw_piece="wP"
+		@color="W"
+	end
+	def can_move_to(piece_origin,piece_to_go)
+		self.move_king(piece_origin,piece_to_go)
+	end
+end
+class PownBlack <Piece
+	def initialize
+		@draw_piece="bP"
+		@color="B"
 	end
 	def can_move_to(piece_origin,piece_to_go)
 		self.move_king(piece_origin,piece_to_go)
 	end
 end
  INITIALIZE_BOARD = {
- "A1" => Tower.new, 
- "B1" => Horse.new,
- "C1" => Bishop.new, 
- "D1" => Queen.new, 
- "E1" => King.new,
- "F1" => Bishop.new, 
- "G1" => Horse.new, 
- "H1" => Tower.new, 
+ "A1" => TowerWhite.new, 
+ "B1" => HorseWhite.new,
+ "C1" => BishopWhite.new, 
+ "D1" => QueenWhite.new, 
+ "E1" => KingWhite.new,
+ "F1" => BishopWhite.new, 
+ "G1" => HorseWhite.new, 
+ "H1" => TowerWhite.new, 
 
- "A8" => Tower.new, 
- "B8" => Horse.new, 
- "C8" => Bishop.new, 
- "D8" => Queen.new, 
- "E8" => King.new,
- "F8" => Bishop.new, 
- "G8" => Horse.new, 
- "H8" => Tower.new
+ "A8" => TowerBlack.new, 
+ "B8" => HorseBlack.new, 
+ "C8" => BishopBlack.new, 
+ "D8" => QueenBlack.new, 
+ "E8" => KingBlack.	new,
+ "F8" => BishopBlack.new, 
+ "G8" => HorseBlack.new, 
+ "H8" => TowerBlack.new
 }
 board=Board.new(INITIALIZE_BOARD)
 board.print
