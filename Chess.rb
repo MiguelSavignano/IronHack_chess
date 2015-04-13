@@ -21,6 +21,10 @@ module MoveHelper
 			change_to_i(piece_origin,piece_to_go)
 			 (@to_go_vertical_move-@origin_vertical_move).abs<=1 && (@to_go_hotizontal_move-@origin_hotizontal_move).abs<=1
 		end
+		def move_king(piece_origin,piece_to_go)
+			change_to_i(piece_origin,piece_to_go)
+			 (@to_go_vertical_move-@origin_vertical_move).abs<=1 && (@to_go_hotizontal_move-@origin_hotizontal_move).abs<=1
+		end
 end
 class Board
 	attr_accessor :board, :piece_to_go, :piece_to_go, :piece_in_board,:player_who_game,:player_who_wait
@@ -30,20 +34,15 @@ class Board
 		@player_who_wait=black_player
 		@board=hash_board
 	end
-	def change_player(player_who_game)
+		def change_player(player_who_game)
 		@player_who_game=@player_who_wait
 		@player_who_wait=player_who_game
 	end
 	def print
 			puts "-"*19
-			puts "#{8} |#{@board["A8"].draw_piece} #{@board["B8"].draw_piece} #{@board["C8"].draw_piece} #{@board["D8"].draw_piece} #{@board["E8"].draw_piece} #{@board["F8"].draw_piece} #{@board["G8"].draw_piece} #{@board["H8"].draw_piece}|"
-			puts "#{7} |#{@board["A7"].draw_piece} #{@board["B7"].draw_piece} #{@board["C7"].draw_piece} #{@board["D7"].draw_piece} #{@board["E7"].draw_piece} #{@board["F7"].draw_piece} #{@board["G7"].draw_piece} #{@board["H7"].draw_piece}|"
-			puts "#{6} |#{@board["A6"].draw_piece} #{@board["B6"].draw_piece} #{@board["C6"].draw_piece} #{@board["D6"].draw_piece} #{@board["E6"].draw_piece} #{@board["F6"].draw_piece} #{@board["G6"].draw_piece} #{@board["H6"].draw_piece}|"
-			puts "#{5} |#{@board["A5"].draw_piece} #{@board["B5"].draw_piece} #{@board["C5"].draw_piece} #{@board["D5"].draw_piece} #{@board["E5"].draw_piece} #{@board["F5"].draw_piece} #{@board["G5"].draw_piece} #{@board["H5"].draw_piece}|"
-			puts "#{4} |#{@board["A4"].draw_piece} #{@board["B4"].draw_piece} #{@board["C4"].draw_piece} #{@board["D4"].draw_piece} #{@board["E4"].draw_piece} #{@board["F4"].draw_piece} #{@board["G4"].draw_piece} #{@board["H4"].draw_piece}|"
-			puts "#{3} |#{@board["A3"].draw_piece} #{@board["B3"].draw_piece} #{@board["C3"].draw_piece} #{@board["D3"].draw_piece} #{@board["E3"].draw_piece} #{@board["F3"].draw_piece} #{@board["G3"].draw_piece} #{@board["H3"].draw_piece}|"
-			puts "#{2} |#{@board["A2"].draw_piece} #{@board["B2"].draw_piece} #{@board["C2"].draw_piece} #{@board["D2"].draw_piece} #{@board["E2"].draw_piece} #{@board["F2"].draw_piece} #{@board["G2"].draw_piece} #{@board["H2"].draw_piece}|"
-			puts "#{1} |#{@board["A1"].draw_piece} #{@board["B1"].draw_piece} #{@board["C1"].draw_piece} #{@board["D1"].draw_piece} #{@board["E1"].draw_piece} #{@board["F1"].draw_piece} #{@board["G1"].draw_piece} #{@board["H1"].draw_piece}|"
+			(1..8).each do |num| num=(num-9).abs
+				puts "#{num} |#{@board["A#{num}"].draw_piece} #{@board["B#{num}"].draw_piece} #{@board["C#{num}"].draw_piece} #{@board["D#{num}"].draw_piece} #{@board["E#{num}"].draw_piece} #{@board["F#{num}"].draw_piece} #{@board["G#{num}"].draw_piece} #{@board["H#{num}"].draw_piece}|"
+			end
 			puts "-"*19
 			puts "   A  B  C  D  E  F  G  H"
 	end
@@ -61,7 +60,7 @@ class Board
 		   		end 
 		    return false
 		end
-	system "cls"
+	system "clear"
 	print
 	end
 	def piece_can_kill(position_origin,position_to_go)
@@ -94,13 +93,10 @@ class TowerWhite <Piece
 		 self.move_tower(piece_origin,piece_to_go)
 	end
 end
-class TowerBlack <Piece
+class TowerBlack <TowerWhite
 	def initialize
 		@draw_piece="bR"
 		@color="B"
-	end
-	def can_move_to(piece_origin,piece_to_go)
-		 self.move_tower(piece_origin,piece_to_go)
 	end
 end
 class HorseWhite <Piece
@@ -112,13 +108,10 @@ class HorseWhite <Piece
 		( self.move_horse_circle(piece_origin,piece_to_go) ) && !self.move_tower(piece_origin,piece_to_go)  && !self.move_bishop(piece_origin,piece_to_go)
 	end
 end
-class HorseBlack <Piece
+class HorseBlack <HorseWhite
 	def initialize
 		@draw_piece="bN"
 		@color="B"
-	end
-	def can_move_to(piece_origin,piece_to_go)
-		( self.move_horse_circle(piece_origin,piece_to_go) ) && !self.move_tower(piece_origin,piece_to_go)  && !self.move_bishop(piece_origin,piece_to_go)
 	end
 end
 class BishopWhite <Piece
@@ -130,13 +123,10 @@ class BishopWhite <Piece
 		 self.move_bishop(piece_origin,piece_to_go)
 	end
 end
-class BishopBlack <Piece
+class BishopBlack <BishopWhite
 	def initialize
 		@draw_piece="bB"
 		@color="B"
-	end
-	def can_move_to(piece_origin,piece_to_go)
-		 self.move_bishop(piece_origin,piece_to_go)
 	end
 end
 class QueenWhite <Piece
@@ -148,13 +138,10 @@ class QueenWhite <Piece
 		self.move_tower(piece_origin,piece_to_go) || self.move_bishop(piece_origin,piece_to_go)
 	end
 end
-class QueenBlack <Piece
+class QueenBlack <QueenWhite
 	def initialize
 		@draw_piece="bQ"
 		@color="B"
-	end
-	def can_move_to(piece_origin,piece_to_go)
-		self.move_tower(piece_origin,piece_to_go) || self.move_bishop(piece_origin,piece_to_go)
 	end
 end
 class KingWhite <Piece
@@ -166,13 +153,10 @@ class KingWhite <Piece
 		self.move_king(piece_origin,piece_to_go)
 	end
 end
-class KingBlack <Piece
+class KingBlack <KingWhite
 	def initialize
 		@draw_piece="bK"
 		@color="B"
-	end
-	def can_move_to(piece_origin,piece_to_go)
-		self.move_king(piece_origin,piece_to_go)
 	end
 end
 class PownWhite <Piece
@@ -218,7 +202,6 @@ class Player1
 		@color="W"
 	end
 	def ask_what_want_move
-		system "cls"
 		puts "Player1: what piece you want to move?"
 		gets.chomp
 	end
@@ -233,7 +216,6 @@ class Player2
 		@color="B"
 	end
 	def ask_what_want_move
-		system "cls"
 		puts "Player2: what piece you want to move?"
 		gets.chomp
 	end
@@ -250,6 +232,7 @@ end
 board=Board.new(INITIALIZE_BOARD,Player1.new,Player2.new)
 output=Ouput.new
 while 1==1
+	system "clear"
 	board.print
 	if board.move_piece(board.player_who_game.ask_what_want_move,board.player_who_game.ask_where_want_move)
 		output.print_text "Legal move"
@@ -257,7 +240,6 @@ while 1==1
 	else 
 		output.print_text "Ilegal move"
 	end
-	system "cls"
 end
 binding.pry
 #board.print print board instance
